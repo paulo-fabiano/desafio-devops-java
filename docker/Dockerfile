@@ -1,16 +1,9 @@
-# Build
-FROM maven:3.8.3-openjdk-17 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean install -DskipTests -Dmaven.test.skip=true -Dmaven.build.dest=/app/target
+FROM tomcat:10.1-jdk17-corretto
 
-# Aplication
-FROM openjdk:17
+ADD https://get.jenkins.io/war-stable/2.528.3/jenkins.war /usr/local/tomcat/webapps/jenkins.war
 
-WORKDIR /app
+ADD https://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-agent-jvm/2.4.2/jolokia-agent-jvm-2.4.2-javaagent.jar /opt/jolokia.jar
 
-COPY --from=build /app/target/lista_tarefas.jar /app/app.jar
+EXPOSE 8080 8778
 
-EXPOSE 8080
-
-CMD ["java", "-jar", "app.jar"]
+ENV CATALINA_OPTS="-javaagent:/opt/jolokia.jar=port=8778,host=0.0.0.0"

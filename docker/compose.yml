@@ -1,0 +1,46 @@
+services:
+  tomcat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tomcat
+    ports:
+      - 8080:8080
+      - 8778:8778
+    restart: on-failure
+    cpus: 1.0
+    mem_reservation: 1G
+    mem_limit: 2G
+    networks:
+      - tomcat
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - ./config/grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yml
+    ports:
+      - 3000:3000
+    restart: on-failure
+    networks:
+      - tomcat
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    restart: on-failure
+    networks:
+      - tomcat
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+
+
+
+networks:
+  tomcat:
+    name: tomcat
+    driver: bridge
