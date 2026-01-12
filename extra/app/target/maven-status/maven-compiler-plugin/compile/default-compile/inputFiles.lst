@@ -1,0 +1,11 @@
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/ListaTarefasApplication.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/controller/TarefaController.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/dto/TarefaRequestDto.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/dto/TarefaResponseDto.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/entity/TarefaEntity.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/exception/TarefaNaoEncontradaException.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/handler/ErrorMessage.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/handler/GlobalExceptionHandler.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/repository/TarefaRepository.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/service/TarefaService.java
+/home/paulofilho/Documentos/lista-tarefas/backend/src/main/java/com/paulo/lista_tarefas/service/TarefaServiceImpl.java

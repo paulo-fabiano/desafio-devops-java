@@ -1,0 +1,13 @@
+com/paulo/lista_tarefas/repository/TarefaRepository.class
+com/paulo/lista_tarefas/controller/TarefaController.class
+com/paulo/lista_tarefas/dto/TarefaRequestDto.class
+com/paulo/lista_tarefas/handler/ErrorMessage.class
+com/paulo/lista_tarefas/entity/TarefaEntity.class
+com/paulo/lista_tarefas/exception/TarefaNaoEncontradaException.class
+com/paulo/lista_tarefas/dto/TarefaResponseDto.class
+com/paulo/lista_tarefas/service/TarefaServiceImpl.class
+com/paulo/lista_tarefas/service/TarefaService.class
+com/paulo/lista_tarefas/ListaTarefasApplication.class
+com/paulo/lista_tarefas/handler/ErrorMessage$ErrorMessageBuilder.class
+com/paulo/lista_tarefas/handler/GlobalExceptionHandler.class
+com/paulo/lista_tarefas/entity/TarefaEntity$TarefaEntityBuilder.class
