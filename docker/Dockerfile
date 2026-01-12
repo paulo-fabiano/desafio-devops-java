@@ -1,4 +1,4 @@
-FROM tomcat:10.1-jdk17-corretto
+FROM tomcat:10-jre17
 
 ADD https://get.jenkins.io/war-stable/2.528.3/jenkins.war /usr/local/tomcat/webapps/jenkins.war
 
