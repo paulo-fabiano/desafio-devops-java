@@ -110,3 +110,21 @@ Podemos consultar o consumo de memória Heap, utilizando:
 ```bash
 curl http://localhost:8778/jolokia/read/java.lang:type=Memory/HeapMemoryUsage | jq .
 ```
+
+```json
+{
+  "request": {
+    "mbean": "java.lang:type=Memory",
+    "attribute": "HeapMemoryUsage",
+    "type": "read"
+  },
+  "value": {
+    "init": 33554432,
+    "committed": 184455168,
+    "max": 518979584,
+    "used": 150166608
+  },
+  "status": 200,
+  "timestamp": 1768246855
+}
+```
