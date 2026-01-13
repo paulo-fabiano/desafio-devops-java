@@ -21,6 +21,67 @@ Para que o Tomcat reconheça o Jolokia, configuramos a variável de ambiente `CA
 ENV CATALINA_OPTS="-javaagent:/opt/jolokia.jar=port=8778,host=0.0.0.0"
 ```
 
+## SAST 
+
+Pensando em dar mais segurança ao projeto, utilizei o Trivy, ferramenta da AquaSec para analisar o Dockerfile criado.
+
+Dentro do Diretório do Docker
+
+```bash
+trivy config Dockerfile
+```
+
+O Trivy nos da alguns insighs em relação a configuração do Dockerfile:
+
+```shell
+2026-01-13T10:30:19-03:00       INFO    [misconfig] Misconfiguration scanning is enabled
+2026-01-13T10:30:22-03:00       INFO    Detected config files   num=1
+
+Report Summary
+
+┌────────────┬────────────┬───────────────────┐
+│   Target   │    Type    │ Misconfigurations │
+├────────────┼────────────┼───────────────────┤
+│ Dockerfile │ dockerfile │         2         │
+└────────────┴────────────┴───────────────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+
+Dockerfile (dockerfile)
+
+Tests: 27 (SUCCESSES: 25, FAILURES: 2)
+Failures: 2 (UNKNOWN: 0, LOW: 1, MEDIUM: 0, HIGH: 1, CRITICAL: 0)
+
+AVD-DS-0002 (HIGH): Specify at least 1 USER command in Dockerfile with non-root user as argument
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════
+Running containers with 'root' user can lead to a container escape situation. It is a best practice to run containers as non-root users, which can be done by adding a 'USER' statement to the Dockerfile.
+
+See https://avd.aquasec.com/misconfig/ds002
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+AVD-DS-0026 (LOW): Add HEALTHCHECK instruction in your Dockerfile
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════
+You should add HEALTHCHECK instruction in your docker container images to perform the health check on running containers.
+
+See https://avd.aquasec.com/misconfig/ds026
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
+> Nota: 
+Uma boa prática é não executar o container como usuário `root`. Durante a implementação, o Jenkins apresentou o erro java.nio.file.AccessDeniedException: /var/jenkins_home/secret.key. A causa era ao definir USER tomcat, o processo perdeu permissão de escrita no volume /var/jenkins_home, que havia sido criado originalmente pelo usuário root. Foram feitas algumas tentativas de configuração, porém não deram certo. Para o desafio irei deixar passar no momento e tomar notas posteriormente sobre qual seria a boa prática.
+
+
+Fiz também a adicão da instrução de `HEALTHCHECK`:
+
+```Dockerfile
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 CMD curl -f http://localhost:8080/jenkins/health/ || exit 1
+```
+
+Após esses passos o Trivy só nos reporta o problema em relação ao usuário no Dockerfile.
+
+
 ## Como Executar o Projeto
 
 Para subir o ambiente, utilize o comando abaixo na raiz do diretório onde se encontra o arquivo `compose.yml`:

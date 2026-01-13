@@ -55,6 +55,8 @@ spec:
           successThreshold: 1
           failureThreshold: 2
         env:
+          - name: JENKINS_PREFIX
+            value: /jenkins
           - name: JENKINS_HOME
             value: /var/jenkins_home
           - name: JAVA_OPTS

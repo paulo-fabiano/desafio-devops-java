@@ -13,7 +13,7 @@ A instalação foi realizada seguindo a documentação oficial:
 Após a instalação do K3D, foi criado o cluster com o seguinte comando:
 
 ```bash
-k3d cluster create desafio-devops-java -p "80:80@loadbalancer" -p "8778:8778@loadbalancer"
+k3d cluster create desafio-devops-java -p "80:80@loadbalancer"
 ```
 
 > Nota: As portas foram mapeadas para o LoadBalancer do K3D com o objetivo de utilizar o Traefik, que já vem configurado por padrão no cluster.
@@ -80,14 +80,12 @@ Todos os componentes do Jenkins subiram corretamente dentro do namespace dedicad
 
 A partir desse ponto, basta seguir com a configuração padrão do Jenkins via interface web.
 
-# Desafio Técnico - Etapa 3
+![Jenkins K8S](/.github/images/jenkins-k8s.png)
 
-Para essa etapa foi proposto configurar o montioramento do cluster
+Para buscar a senha inicial basta usar o comando:
 
-Optei por não utilizar Operator nem Helm para instalar, prefiri seguir com Vanilla Kubernetes, o básico.
+```bash
+kubectl exec jenkins-deploy-c9fbbc577-jnqq2 -c jenkins-jolokia -n jenkins -- cat /var/jenkins_home/secrets/initialAdminPassword
+```
 
-fiz as configurações dele apontand
-
-Como o prometheus não consegue ler os que o JOlokia exporta, utilizei um container sidecar da JMX exporter para que o promehtues consieguesse ler as metricas
-
-configurei o grafana e o prometehus
+Com isso, agora é só configurar o Jenkins.

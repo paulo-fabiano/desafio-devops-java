@@ -5,9 +5,10 @@ services:
       dockerfile: Dockerfile
     container_name: tomcat
     environment:
-      - JENKINS_HOME=/var/jenkins_home
+      - JENKINS_HOME="/var/jenkins_home"
+      - CATALINA_OPTS="-javaagent:/opt/jolokia.jar=port=8778,host=0.0.0.0"
     volumes:
-      - jenkins:/var/jenkins_home
+      - "jenkins:/var/jenkins_home"
     ports:
       - 8080:8080
       - 8778:8778

@@ -2,6 +2,10 @@
 
 O objetivo desta etapa foi implementar uma stack completa de monitoramento no cluster Kubernetes utilizando Prometheus para coleta e armazenamento de métricas e Grafana para visualização e dashboards.
 
+## Pré-Requisitos
+
+Um dos pré-requisitos dessa etapa é o **helm** para que possamos instalar pacotes do [Artifact Hub](https://artifacthub.io/).
+
 ## Instalação do Prometheus 
 
 A instalação foi realizada utilizando o Helm Chart oficial da comunidade, garantindo a implantação dos seguintes componentes:
@@ -16,11 +20,11 @@ A instalação foi realizada utilizando o Helm Chart oficial da comunidade, gara
 
 - Pushgateway: Suporte para coleta de métricas de jobs de curta duração.
 
-> Nota: A unica configuração que fiz no chart foi em relação ao armazenamento que deixei um armazenamento de 10Gi.
+> Nota: A única configuração que fiz no chart foi em relação ao armazenamento que deixei um armazenamento de 10Gi.
 
 ###  Instalação
 
-Criação do namespace e instalação: Levando em conta que você deve estar dentro de kubernetes/manifestos/prometheus
+Criação do namespace e instalação: Levando em conta que você deve estar dentro do diretório `kubernetes/manifestos/prometheus`.
 
 ```bash
 kubectl create ns prometheus
@@ -79,7 +83,7 @@ For more information on running Prometheus, visit:
 https://prometheus.io/
 ```
 
-## Insalação Grafana
+## Instalação Grafana
 
 O Grafana foi instalado para atuar como a camada de visualização, conectando-se ao Prometheus como fonte de dados (Datasource).
 
