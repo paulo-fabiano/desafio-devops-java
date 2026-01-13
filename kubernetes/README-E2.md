@@ -42,6 +42,16 @@ Todos os manifestos da aplicação estão dentro de [jenkins-jolokia](kubernetes
 
 Para que os dados do Jenkins fossem salvos, configurei uma PVC (Persistente Claim Volume) para que os dados não fossem perdidos em caso de um restart do Pod.
 
+### Jenkins Prefix
+
+Para garantir a integridade das URLs, redirecionamentos e carregamento de assets (CSS/JS), configurei o prefixo da aplicação fiz a adição da variável de ambiente
+
+```shell
+JENKINS_PREFIX
+```
+
+O valor setar foi `/jenkins`
+
 ### Manifestos
 
 Os manifestos foram feitos levando em conta a questão da segurança.

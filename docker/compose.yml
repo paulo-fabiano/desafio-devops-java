@@ -6,6 +6,7 @@ services:
     container_name: tomcat
     environment:
       - JENKINS_HOME="/var/jenkins_home"
+      - JENKINS_PREFIX="/jenkins"
       - CATALINA_OPTS="-javaagent:/opt/jolokia.jar=port=8778,host=0.0.0.0"
     volumes:
       - "jenkins:/var/jenkins_home"
