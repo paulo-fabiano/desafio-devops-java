@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-deploy
+  namespace: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - image: pfabianofilho/jenkins-jolokia:1.0.0
+        name: jenkins-jolokia
+        ports:
+          - name: web
+            containerPort: 8080
+            protocol: TCP
+          - name: jolokia-metrics
+            containerPort: 8778
+            protocol: TCP
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 1.0
+            memory: 2Gi
+        imagePullPolicy: IfNotPresent
+        startupProbe:
+          httpGet:
+            port: web
+            path: /jenkins/health
+            scheme: HTTP  
+          failureThreshold: 18
+          periodSeconds: 10
+        readinessProbe:
+          httpGet: 
+            port: web
+            path: /jenkins/health
+            scheme: HTTP  
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 2
+        livenessProbe:
+          httpGet: 
+            port: web
+            path: /jenkins/health
+            scheme: HTTP    
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 2
+        env:
+          - name: JENKINS_HOME
+            value: /var/jenkins_home
+          - name: CATALINA_OPTS
+            valueFrom: 
+              configMapKeyRef:
+                name: jmx-exporter-config
+                key: CATALINA_OPTS
+        volumeMounts:
+          - name: jenkins-storage
+            mountPath: /var/jenkins_home
+      - image: bitnami/jmx-exporter:latest
+        name: jvm-exporter 
+        ports:
+          - name: metrics
+            containerPort: 5556
+            protocol: TCP
+        imagePullPolicy: IfNotPresent
+        startupProbe:
+          httpGet:
+            port: 8080
+            path: /jenkins/health
+            scheme: HTTP  
+          failureThreshold: 18
+          periodSeconds: 10
+        readinessProbe:
+          httpGet: 
+            port: 8080
+            path: /jenkins/health
+            scheme: HTTP  
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 2
+        livenessProbe:
+          httpGet: 
+            port: 8080
+            path: /jenkins/health
+            scheme: HTTP    
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 2
+        volumeMounts: 
+          - name: config-jvm-exporter
+            mountPath: /etc/jmx-exporter
+
+      volumes:
+        - name: jenkins-storage
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
+        - name: config-jvm-exporter
+          configMap:
+            name: jmx-exporter-config
+            items:
+              - key: jmx-exporter-config.yaml
+                path: confif.yaml

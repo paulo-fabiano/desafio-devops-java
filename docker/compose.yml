@@ -4,6 +4,10 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: tomcat
+    environment:
+      - JENKINS_HOME=/var/jenkins_home
+    volumes:
+      - jenkins:/var/jenkins_home
     ports:
       - 8080:8080
       - 8778:8778
@@ -18,3 +22,8 @@ networks:
   tomcat:
     name: tomcat
     driver: bridge
+
+volumes:
+  jenkins:
+    name: jenkins_home
+    external: false
