@@ -1,0 +1,18 @@
+ingress:
+  enabled: true
+  path: /
+  pathType: Prefix
+  hosts:
+    - grafana.192.168.122.22.nip.io
+
+
+datasources: 
+ datasources.yaml:
+   apiVersion: 1
+   datasources:
+   - name: Prometheus
+     type: prometheus
+     url: http://prometheus-server.prometheus.svc.cluster.local
+     access: proxy
+     isDefault: true
+

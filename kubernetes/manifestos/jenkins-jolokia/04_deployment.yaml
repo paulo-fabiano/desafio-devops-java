@@ -57,11 +57,11 @@ spec:
         env:
           - name: JENKINS_HOME
             value: /var/jenkins_home
-          - name: CATALINA_OPTS
+          - name: JAVA_OPTS
             valueFrom: 
               configMapKeyRef:
                 name: jmx-exporter-config
-                key: CATALINA_OPTS
+                key: JAVA_OPTS
         volumeMounts:
           - name: jenkins-storage
             mountPath: /var/jenkins_home
@@ -98,7 +98,6 @@ spec:
         volumeMounts: 
           - name: config-jvm-exporter
             mountPath: /etc/jmx-exporter
-
       volumes:
         - name: jenkins-storage
           persistentVolumeClaim:

@@ -3,6 +3,10 @@ kind: Service
 metadata:
   name: jenkins-svc
   namespace: jenkins
+  annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "5556" 
+      prometheus.io/path: "/metrics" 
 spec:
   selector:
     app: jenkins
