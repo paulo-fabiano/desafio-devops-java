@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jenkins-deploy
-  namespace: jenkins
+  name: jenkins-deployment
+  namespace: desafio-devops-java
 spec:
   replicas: 1
   selector:
@@ -14,34 +14,34 @@ spec:
         app: jenkins
     spec:
       containers:
-      - image: pfabianofilho/jenkins-jolokia:1.0.0
-        name: jenkins-jolokia
+      - image: paulofabianoo/desafio-devops-java:latest
+        name: jenkins-jmx
         ports:
           - name: web
             containerPort: 8080
             protocol: TCP
-          - name: jolokia-metrics
-            containerPort: 8778
+          - name: tomcat-metrics
+            containerPort: 9404
             protocol: TCP
         resources:
           requests:
             cpu: 100m
             memory: 512Mi
           limits:
-            cpu: 1.0
+            cpu: 500m
             memory: 2Gi
         imagePullPolicy: IfNotPresent
         startupProbe:
           httpGet:
             port: web
-            path: /jenkins/health
+            path: /jenkins/health/
             scheme: HTTP  
           failureThreshold: 18
           periodSeconds: 10
         readinessProbe:
           httpGet: 
             port: web
-            path: /jenkins/health
+            path: /jenkins/health/
             scheme: HTTP  
           periodSeconds: 20
           successThreshold: 1
@@ -49,7 +49,7 @@ spec:
         livenessProbe:
           httpGet: 
             port: web
-            path: /jenkins/health
+            path: /jenkins/health/
             scheme: HTTP    
           periodSeconds: 20
           successThreshold: 1
@@ -59,54 +59,24 @@ spec:
             value: /jenkins
           - name: JENKINS_HOME
             value: /var/jenkins_home
-          - name: JAVA_OPTS
-            valueFrom: 
+          - name: JAVA_TOOL_OPTIONS
+            valueFrom:
               configMapKeyRef:
+                key: JAVA_TOOL_OPTIONS
                 name: jmx-exporter-config
-                key: JAVA_OPTS
         volumeMounts:
           - name: jenkins-storage
             mountPath: /var/jenkins_home
-      - image: bitnami/jmx-exporter:latest
-        name: jvm-exporter 
-        ports:
-          - name: metrics
-            containerPort: 5556
-            protocol: TCP
-        imagePullPolicy: IfNotPresent
-        startupProbe:
-          httpGet:
-            port: 8080
-            path: /jenkins/health
-            scheme: HTTP  
-          failureThreshold: 18
-          periodSeconds: 10
-        readinessProbe:
-          httpGet: 
-            port: 8080
-            path: /jenkins/health
-            scheme: HTTP  
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 2
-        livenessProbe:
-          httpGet: 
-            port: 8080
-            path: /jenkins/health
-            scheme: HTTP    
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 2
-        volumeMounts: 
-          - name: config-jvm-exporter
-            mountPath: /etc/jmx-exporter
+          - name: tomcat-metrics
+            mountPath: /opt/jmx_exporter/config.yaml
+            subPath: config.yaml
       volumes:
         - name: jenkins-storage
           persistentVolumeClaim:
             claimName: jenkins-pvc
-        - name: config-jvm-exporter
+        - name: tomcat-metrics
           configMap:
             name: jmx-exporter-config
             items:
-              - key: jmx-exporter-config.yaml
-                path: confif.yaml
+              - key: config.yaml
+                path: config.yaml

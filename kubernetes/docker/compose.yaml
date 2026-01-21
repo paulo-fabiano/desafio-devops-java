@@ -1,0 +1,58 @@
+services:
+  tomcat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tomcat
+    environment:
+      - JAVA_TOOL_OPTIONS=-javaagent:/opt/jmx_exporter/jmx_exporter.jar=0.0.0.0:9404:/opt/jmx_exporter/config.yaml
+    volumes:
+      - "jenkins:/var/jenkins_home"
+      - "./config.yaml:/opt/jmx_exporter/config.yaml"
+    ports:
+      - 8080:8080
+      - 9404:9404
+    restart: on-failure
+    cpus: 1.0
+    mem_reservation: 1G
+    mem_limit: 2G
+    networks:
+      - tomcat
+    
+  prometheus:
+    image: prom/prometheus:v3.9.1
+    container_name: prometheus
+    volumes:
+      - "./.config/prometheus.yml:/etc/prometheus/prometheus.yml"
+    ports:
+      - 9090:9090
+    restart: on-failure
+    networks:
+      - tomcat
+
+  grafana:
+    image: grafana/grafana:12.4.0-20836657505
+    container_name: grafana
+    volumes:
+      - grafana:/var/lib/grafana
+      # - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yml
+    ports:
+      - "3000:3000"
+    restart: on-failure
+    networks:
+      - tomcat
+    depends_on:
+      - prometheus
+
+networks:
+  tomcat:
+    name: tomcat
+    driver: bridge
+
+volumes:
+  jenkins:
+    name: jenkins_home
+    external: false
+  grafana:
+    name: grafana_data
+    external: false

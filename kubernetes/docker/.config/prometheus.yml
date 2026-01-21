@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 15s 
+  evaluation_interval: 15s 
+
+scrape_configs:
+
+  - job_name: "tomcat-metrics"
+    static_configs:
+      - targets: ["tomcat:9404"]
+        labels:
+          app: "tomcat"
+          instance: "tomcat"

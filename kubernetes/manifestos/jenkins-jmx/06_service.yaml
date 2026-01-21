@@ -2,10 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jenkins-svc
-  namespace: jenkins
+  namespace: desafio-devops-java
   annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "5556" 
+      prometheus.io/port: "9404" 
       prometheus.io/path: "/metrics" 
 spec:
   selector:
@@ -19,8 +19,8 @@ spec:
       name: jolokia-metrics
       targetPort: 8778
       protocol: TCP
-    - port: 5556
+    - port: 9404
       name: metrics
-      targetPort: 5556
+      targetPort: 9404
       protocol: TCP
   type: ClusterIP

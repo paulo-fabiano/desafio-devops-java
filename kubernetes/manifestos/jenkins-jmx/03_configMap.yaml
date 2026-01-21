@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jmx-exporter-config
+  namespace: desafio-devops-java
+data:
+  JAVA_TOOL_OPTIONS: >-
+      -javaagent:/opt/jmx_exporter/jmx_exporter.jar=0.0.0.0:9404:/opt/jmx_exporter/config.yaml
+  config.yaml: >-
+      rules:
+        - pattern: ".*"

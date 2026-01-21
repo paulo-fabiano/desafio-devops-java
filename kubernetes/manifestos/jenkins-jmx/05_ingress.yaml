@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata: 
-  name: jenkins-ing
-  namespace: jenkins
+  name: jenkins-ingress
+  namespace: desafio-devops-java
 spec: 
   rules:
     - host: jenkins.192.168.122.22.nip.io
