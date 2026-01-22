@@ -14,7 +14,7 @@ spec:
         app: jenkins
     spec:
       containers:
-      - image: paulofabianoo/desafio-devops-java:latest
+      - image: paulofabianoo/desafio-devops-java:1.0.0
         name: jenkins-jmx
         ports:
           - name: web
