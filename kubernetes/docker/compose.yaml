@@ -8,7 +8,6 @@ services:
       - JAVA_TOOL_OPTIONS=-javaagent:/opt/jmx_exporter/jmx_exporter.jar=0.0.0.0:9404:/opt/jmx_exporter/config.yaml
     volumes:
       - "jenkins:/var/jenkins_home"
-      - "./config.yaml:/opt/jmx_exporter/config.yaml"
     ports:
       - 8080:8080
       - 9404:9404
